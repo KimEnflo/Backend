@@ -16,7 +16,10 @@ static WebApplication BuildApp(string[] args)
     ConfigureMongo(builder);
 
     var app = builder.Build();
-
+    
+    app.UseCors("Frontend");
+    app.UseExceptionHandler();
+    
     ConfigureMiddleWare(app);
     ConfigureEndpoints(app);
 
@@ -26,7 +29,19 @@ static WebApplication BuildApp(string[] args)
 static void ConfigureServices(WebApplicationBuilder builder)
 {
     var services = builder.Services;
-
+    
+    services.AddCors(options =>
+    {
+        options.AddPolicy("Frontend", policy =>
+        {
+            policy
+                .WithOrigins("http://localhost:3000")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+    });
+    
+    services.AddHealthChecks();
     services.AddProblemDetails();
     services.AddControllers();
     services.AddScoped<SupportService>();
@@ -58,6 +73,7 @@ static void ConfigureMongo(WebApplicationBuilder builder)
 
 static void ConfigureEndpoints(WebApplication app)
 {
+    app.MapHealthChecks("/health");
     app.MapControllers();
 }
 
