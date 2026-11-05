@@ -40,3 +40,22 @@ Content-Type: application/json
 }
 
 ############################################  
+
+PUT {{url}}/contactinfo/6acf6d0b78751f129f29ec92
+Content-Type: application/json
+
+{
+  "name": "updated",
+  "phonenumber": "+468842561",
+  "email": "supportjadaja@gmail.com",
+  "website": "oiqjojiwq.com",
+  "supporthours": {
+    "monday": {
+      "open": "07:00",
+      "close": "09:00"
+    }
+  }
+}
+
+
+############################################  
