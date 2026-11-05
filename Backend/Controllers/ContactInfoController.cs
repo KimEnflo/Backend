@@ -37,4 +37,27 @@ public class ContactInfoController (SupportService supportService, ILogger<Conta
         }
    
     }
+    
+    /// <summary>  
+    /// Retrieves the specified entry from the database by name.  
+    /// </summary>  
+    /// <param name="companyName">The name of the company to collect</param>  
+    /// <returns>JSON object of the retrieved entry if it exists.</returns>  
+    [HttpGet("{companyName}")]  
+    [ProducesResponseType<ContactInfo>(StatusCodes.Status200OK)]  
+    [ProducesResponseType(StatusCodes.Status404NotFound)]  
+    [ProducesResponseType<ContactInfo>(StatusCodes.Status500InternalServerError)]  
+    public async Task<IActionResult> GetContactInfo(string companyName)  
+    {  
+        try  
+        {  
+            var contactInfo = await supportService.GetAsync(companyName);  
+            
+            return contactInfo is null  
+                ? NotFound()  
+                : Ok(contactInfo);  
+        }    catch (Exception ex)  
+        {   logger.LogError(ex ,"Error reading database: {ex}",ex.Message);  
+            return StatusCode(StatusCodes.Status500InternalServerError, ex);  
+        }}  
 }
