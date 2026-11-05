@@ -23,5 +23,12 @@ public class SupportService(IMongoDatabase database,IOptions<MongoConfig> config
     /// </returns> 
     public async Task<List<ContactInfo>> GetAsync() =>
         await _contactInfoCollection.Find(_ => true).ToListAsync();
-
+    
+    /// <summary>  
+    /// Retrieves the specified company by name from the database.  
+    /// </summary>  
+    /// <param name="companyName">Name of the company to retrieve</param>  
+    /// <returns>Object containing all the company support information</returns>  
+    public async Task<ContactInfo?> GetAsync(string companyName) =>  
+        await _contactInfoCollection.Find(x => x.Name == companyName).FirstOrDefaultAsync();  
 }
