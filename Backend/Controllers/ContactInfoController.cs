@@ -60,4 +60,28 @@ public class ContactInfoController (SupportService supportService, ILogger<Conta
         {   logger.LogError(ex ,"Error reading database: {ex}",ex.Message);  
             return StatusCode(StatusCodes.Status500InternalServerError, ex);  
         }}  
+    
+    /// <summary>  
+    /// Creates a new entry in the database with the provided payload.  
+    /// </summary>  
+    /// <param name="contactInfo">JSON payload with contact information</param>  
+    /// <returns>JSON object of the created object</returns>  
+    [HttpPost]  
+    [ProducesResponseType<ContactInfo>(StatusCodes.Status201Created)]  
+    [ProducesResponseType<ContactInfo>(StatusCodes.Status400BadRequest)]  
+    [ProducesResponseType<ContactInfo>(StatusCodes.Status500InternalServerError)]  
+    public async Task<IActionResult> PostContactInfo([FromBody] ContactInfo contactInfo)  
+    {  
+        try  
+        {  
+            await supportService.CreateAsync(contactInfo);  
+            return CreatedAtAction(  
+                nameof(GetContactInfo),  
+                new { companyName = contactInfo.Name },  
+                contactInfo);    }    catch (MongoWriteException e)  
+        {        logger.LogError(e, "Failed to create contact info for {CompanyName}", contactInfo.Name);  
+            return StatusCode(  
+                StatusCodes.Status500InternalServerError,  
+                "Failed to create contact information.");  
+        }    }  
 }
