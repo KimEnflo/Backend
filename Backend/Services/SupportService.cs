@@ -72,4 +72,13 @@ public class SupportService(IMongoDatabase database, IOptions<MongoConfig> confi
             x => x.Id == id,
             replacement);
     }
+
+    /// <summary>
+    ///     Remove the specified entry from the database.
+    /// </summary>
+    /// <param name="id">id of the company to delete</param>
+    public async Task<DeleteResult> RemoveAsync(string id)
+    {
+        return await _contactInfoCollection.DeleteOneAsync(x => x.Id == id);
+    }
 }

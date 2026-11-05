@@ -126,4 +126,31 @@ public class ContactInfoController(SupportService supportService, ILogger<Contac
                 "Failed to update contact information.");
         }
     }
+
+    /// <summary>
+    ///     Removes an entry from the database.
+    /// </summary>
+    /// <param name="id">ID of the entry to remove</param>
+    /// <returns>JSON of the deleted object</returns>
+    [HttpDelete("{id}")]
+    [ProducesResponseType<ContactInfo>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<ContactInfo>(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> DeleteContactInfo(string id)
+    {
+        try
+        {
+            var deletedContactInfo = await supportService.RemoveAsync(id);
+            return deletedContactInfo.DeletedCount == 0
+                ? NotFound()
+                : Ok(deletedContactInfo);
+        }
+        catch (MongoWriteException e)
+        {
+            logger.LogError(e, "Failed to delete contact info for {CompanyName}", id);
+            return StatusCode(
+                StatusCodes.Status500InternalServerError,
+                "Failed to delete contact information.");
+        }
+    }
 }
