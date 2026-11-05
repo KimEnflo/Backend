@@ -1,0 +1,10 @@
+@server = localhost:5039
+@api_path = api
+@api_version = 1
+
+@url = http://{{server}}/{{api_path}}/v{{api_version}}
+
+############################################
+
+GET {{url}}/contactinfo
+
