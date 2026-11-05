@@ -8,3 +8,35 @@
 
 GET {{url}}/contactinfo
 
+############################################  
+  
+GET {{url}}/contactinfo/Test Company
+
+############################################
+  
+GET {{url}}/contactinfo/Test Company
+
+############################################  
+
+  
+GET {{url}}/contactinfo/404error
+
+############################################  
+POST {{url}}/contactinfo
+Content-Type: application/json
+
+{
+  "region": "sv",
+  "name": "test2",
+  "phonenumber": "+468842561",
+  "email": "supportjadaja@gmail.com",
+  "website": "oiqjojiwq.com",
+  "supporthours": {
+    "monday": {
+      "open": "07:00",
+      "close": "08:00"
+    }
+  }
+}
+
+############################################  
